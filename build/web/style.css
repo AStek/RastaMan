@@ -1,0 +1,25 @@
+#header{
+   height: 40px;
+   background-color: #696969;
+   color: #f8f8ff;
+}
+#mainMenu{
+height: 40px;
+background-color: gray;
+}
+tr {
+    padding:14px;
+}
+#mainMenu ul li{
+ display: inline;
+ list-style-type: none;
+ padding-right: 20px;
+}
+#content{
+	height: 90%;
+	background-color: #d3d3d3;
+}
+#footer{
+	height: 60px;
+	background-color: gray;
+}
