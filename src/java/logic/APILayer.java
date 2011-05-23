@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author 1
+ * @author Elizabeth
  */
 public class APILayer {
 
@@ -63,7 +63,7 @@ public class APILayer {
     {
         return null;
     }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Удаление учетной записи пользователя
      * @param id String Число идентификатор записи
