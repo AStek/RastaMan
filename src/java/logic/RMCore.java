@@ -23,7 +23,7 @@ public class RMCore
     }
 
     /**
-     * Статический метод который создаёт объект
+     * Статический метод, который создаёт объект
      *
      * @return RMCore
      * Добавил Александр 18.05.2011 19:22
@@ -109,7 +109,7 @@ public class RMCore
      *
      * Добавлен Андреем 21.05.2011 19:52
      */
-    public boolean addAccount(String login, String password, String name,int roleId, int priority, String email)
+    public boolean addAccount(String login, String password, String name, int roleId, int priority, String email)
     {
         return DB.getInstance().query("INSERT INTO account"
                 + " VALUES (null,'" + name + "', '" + login + "', '" + password + "', " + Integer.toString(roleId)
@@ -169,6 +169,11 @@ public class RMCore
         return DB.getInstance().getResultList();
     }
 
+    /**
+     * Проверяет на уникальность логинв
+     * @param String login
+     * @return boolean
+     */
     public boolean isUnique(String login)
     {
         DB.getInstance().query("select * from account where login='" + login + "'");
@@ -181,6 +186,10 @@ public class RMCore
         }
     }
 
+    /**
+     *Возвращает существующих пользователей
+     * @return ArrayList<HashMap>
+     */
     public ArrayList<HashMap> getAccounts()
     {
         if (!DB.getInstance().query("Select * from account"))
@@ -287,6 +296,13 @@ public class RMCore
         return DB.getInstance().getResultList();
     }
 
+    /**
+     * возврвщает ресурсы назначеные роли
+     * @param id идентификатор роли
+     * @return ArrayList<HashMap>
+     *
+     * добавил Александр 24.05 15:01
+     */
     public ArrayList<HashMap> getResOfRole(int id)
     {
         if (!DB.getInstance().query("select e.ID,e.title from res_role,resources e,role r where e.id=Res_id and r.id=role_id and role_id=" + id))
@@ -297,6 +313,14 @@ public class RMCore
         return DB.getInstance().getResultList();
     }
 
+    /**
+     * изменяет название роли по идентификатору
+     * @param id
+     * @param title название роли
+     * @return boolean
+     * 
+     * добавил Александр 24.05 15:09
+     */
     public boolean setRole(int id, String title)
     {
         if (DB.getInstance().query("UPDATE role SET title='" + title + "' WHERE id=" + id))
@@ -308,7 +332,7 @@ public class RMCore
         }
     }
 
-//───────────────────────┤Resource├─────────────────────────────
+//────────────────────────┤Resource├─────────────────────────────
     /**
      * Возвращает ресурс ро указанному идентификатору
      * @param int id
@@ -360,8 +384,10 @@ public class RMCore
 
     /**
      * Дбавляет ресурс
+     *
      * @param String title
      * @return boolean
+     *
      * Добавил Александр 23.05 23.35
      */
     public boolean addRes(String title)
@@ -374,6 +400,14 @@ public class RMCore
         return true;
     }
 
+    /**
+     * Возвращает роли претендующие на указанный ресурс
+     *
+     * @param int Id
+     * @return bollean
+     *
+     *  добавил Александр 24.05 15:58
+     */
     public ArrayList<HashMap> getRoleOfRes(int id)
     {
         if (!DB.getInstance().query("select r.ID,r.title from res_role,resources e,role r where e.id=Res_id and r.id=role_id and res_id=" + id))
@@ -384,6 +418,15 @@ public class RMCore
         return DB.getInstance().getResultList();
     }
 
+    /**
+     * Изменяет ресурс по идентификатору
+     *
+     * @param int id
+     * @param String title
+     * @return bollean
+     *
+     *  добавил Александр 24.05 15:21
+     */
     public boolean setRes(int id, String title)
     {
         if (DB.getInstance().query("UPDATE resources SET title='" + title + "' WHERE id=" + id))
@@ -395,6 +438,16 @@ public class RMCore
         }
     }
 //───────────────────────┤Res_role├─────────────────────────────
+
+    /**
+     * Удаляет связь ресурса с ролью по идентификаторам указаных в параметрах
+     *
+     * @param int resId
+     * @param int roleId
+     * @return bollean
+     *
+     *  добавил Александр 24.05 15:31
+     */
     public boolean rmvResRole(int resId, int roleId)
     {
         if (DB.getInstance().query("delete from res_role where res_id=" + resId + " and role_id=" + roleId))
@@ -406,6 +459,15 @@ public class RMCore
         }
     }
 
+    /**
+     * Связывает ресурс с ролью или роль с ресурсом по идентификаторам
+     *
+     * @param int resId
+     * @param int roleId
+     * @return bollean
+     *
+     *  добавил Александр 24.05 15:43
+     */
     public boolean addResRole(int resId, int roleId)
     {
 
@@ -418,3 +480,5 @@ public class RMCore
         }
     }
 }
+//428
+
