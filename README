@@ -1,0 +1,31 @@
+1.WORKING WITH A DATABASE IN ORACLE
+
+1.1 Installing the database in Oracle and populate base with data
+
+	To create the database you'll need SQL*Plus.
+	For more information about SQL*Plus see:
+		
+		http://download.oracle.com/docs/cd/B19306_01/server.102/b14357/ape.htm
+
+	Start SQL*Plus.
+	Join using the command connect:
+
+		connect [ENTER]
+		Enter your username in Oracle and Password
+
+	Run the scripts from the db subfolder starting with 01 and 02 with using @:
+
+		@ path_before\RastaMan\db\01_create_db.sql
+		@ path_before\RastaMan\db\02_populate_db.sql
+
+1.2 Removing a database from Oracle Database
+
+	Start SQL * Plus.
+	Join using the command connect:
+
+		connect [ENTER]
+		Enter your username in Oracle and Password
+
+	Run the script which begins with 99 from the db subfolder with using @:
+
+		@ path_before\RastaMan\db\99_drop_db.sql
