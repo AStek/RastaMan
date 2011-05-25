@@ -14,10 +14,23 @@ import java.util.Locale;
  *
  * @author Плахтий Александр Сергеевич
  */
-public class DB
+interface DBIface
 {
 
-    private static DB instance = null;
+    public boolean openConnection();
+
+    public boolean query(String q);
+
+    public ArrayList<HashMap> getResultList();
+
+    public ArrayList getColumns();
+
+    public void closeConnection();
+}
+
+public class DB implements DBIface
+{
+
     private int rowCount = 0;
     private ArrayList<HashMap> resList = new ArrayList();
     private ArrayList<String> columnList = new ArrayList();
@@ -25,6 +38,7 @@ public class DB
     private String connectionConf = null;
     private String connectionLogin = null;
     private String connectionPass = null;
+    private boolean iserror = false;
 
     /**
      * инициализация соеденения с базой даных, чтение конфигурации
@@ -32,54 +46,14 @@ public class DB
      *
      * Добавил Александр 19.05.2011 10:02
      */
-    protected DB()
+    public DB()
     {
-        /*
-        try
-        {
-            BufferedReader conf = new BufferedReader(new FileReader(new File("DB.conf")));
-            String host = conf.readLine().split("=")[1];
-            String port = conf.readLine().split("=")[1];
-            String sid = conf.readLine().split("=")[1];
-            connectionLogin = conf.readLine().split("=")[1];
-            connectionPass = conf.readLine().split("=")[1];
-            connectionConf = host + ":" + port + ":" + sid;
-            conf.close();
-        } catch (IOException e)
-        {
-            System.out.println("not found, creating standart conf - 127.0.0.1:1521:XE");
-            try
-            {
-                FileWriter conf = new FileWriter("DB.conf");
-                conf.write("Host=127.0.0.1\nport=1521\nsid=XE\nlogin=System\npassword=1");
-                conf.close();
-            } catch (IOException ex)
-            {
-                System.out.println(ex.toString());
-            }
-        }*/
-
         String host = CfgMgr.getValue("Host");
         String port = CfgMgr.getValue("port");
         String sid = CfgMgr.getValue("sid");
         connectionLogin = CfgMgr.getValue("login");
         connectionPass = CfgMgr.getValue("password");
         connectionConf = host + ":" + port + ":" + sid;
-    }
-
-    /**
-     * Возвращает  ссылку на класс
-     * @return DB
-     *
-     * Добавил Александр 19.05.2011 10:22
-     */
-    public static DB getInstance()
-    {
-        if (instance == null)
-        {
-            instance = new DB();
-        }
-        return instance;
     }
 
     /**
@@ -99,8 +73,6 @@ public class DB
             String driverName = "oracle.jdbc.driver.OracleDriver";
             Class.forName(driverName);
 
-            // Create a connection to the database
-//            String url = "jdbc:oracle:thin:@" + serverName + ":" + portNumber + ":" + sid;
             String url = "jdbc:oracle:thin:@" + connectionConf;
             connection = DriverManager.getConnection(url, connectionLogin, connectionPass);
         } catch (ClassNotFoundException e)
@@ -124,6 +96,7 @@ public class DB
      */
     public boolean query(String q)
     {
+        iserror = false;
         try
         {
             Statement stmt = connection.createStatement();
@@ -163,6 +136,7 @@ public class DB
         } catch (SQLException e)
         {
             System.out.println("DB.Query " + e.toString());
+            iserror = true;
             //error is here
             return false;
         }
@@ -211,6 +185,37 @@ public class DB
      */
     public void finalize()
     {
+        closeConnection();
+    }
+
+    public void printRes()
+    {
+        if (iserror)
+        {
+            System.out.println("Error");
+            return;
+        }
+        for (HashMap t : resList)
+        {
+            System.out.println(t);
+        }
+    }
+
+    public void printRes(String key)
+    {
+        if (iserror)
+        {
+            System.out.println("Error");
+            return;
+        }
+        for (HashMap t : resList)
+        {
+            System.out.println(t.get(key));
+        }
+    }
+
+    public void closeConnection()
+    {
         try
         {
             connection.close();
@@ -218,5 +223,10 @@ public class DB
         {
             // error manager function here
         }
+
+    }
+
+    class testclass
+    {
     }
 }

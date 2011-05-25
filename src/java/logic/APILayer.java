@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author Elizabeth
+ * @author 1
  */
 public class APILayer {
 
@@ -63,7 +63,7 @@ public class APILayer {
     {
         return null;
     }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Удаление учетной записи пользователя
      * @param id String Число идентификатор записи
@@ -74,12 +74,7 @@ public class APILayer {
     public boolean deleteAccount(String  id)
     {
         if (validator.validateInteger(id)){
-            try {
                 return RMCore.getInstance().deleteAccountById(Integer.parseInt(id));
-            } catch (SQLException ex) {
-                //To-Do: Сдесь неплохо бы вставить обращение к менеджеру 
-                return false;
-            }
         } else {
             return false;
         }
@@ -109,14 +104,9 @@ public class APILayer {
         Boolean roleIdFlag = validator.validateInteger(roleId);
 
         if (loginFlag && passwordFlag && nameFlag && emailFlag && priorityFlag && roleIdFlag){
-            try {
                 return RMCore.getInstance().addAccount(login, password, name,
                         Integer.parseInt(roleId), Integer.parseInt(priority),
                         email);
-            } catch (SQLException ex) {
-                //To-Do: Сдесь неплохо бы вставить обращение к менеджеру
-                return false;
-            }
         } else {
             return false;
         }
@@ -147,14 +137,9 @@ public class APILayer {
         Boolean idFlag = validator.validateInteger(id);
 
         if (loginFlag && passwordFlag && nameFlag && emailFlag && priorityFlag && roleIdFlag && idFlag){
-            try {
                 return RMCore.getInstance().updateAccountById(Integer.parseInt(id), login,
                         password, name, Integer.parseInt(roleId),
                         Integer.parseInt(priority), email);
-            } catch (SQLException ex) {
-                //To-Do: Сдесь неплохо бы вставить обращение к менеджеру
-                return false;
-            }
         } else {
             return false;
         }
@@ -168,7 +153,7 @@ public class APILayer {
      */
     public ArrayList<HashMap> getRoleList()
     {
-        return RMCore.getInstance().getRoleList();
+        return RMCore.getInstance().getRoles();
     }
 
     /**
