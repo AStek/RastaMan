@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package logic.Model;
 
+import logic.IModel.IJournal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import logic.DB;
@@ -13,15 +13,27 @@ import logic.DB;
  *
  * @author adm
  */
-public class Journal {
-   private DB db = null;
+public class Journal implements IJournal
+{
+
+    private DB db = null;
 
     public Journal()
     {
         db = DBcontroll.getInstance();
     }
 
-    public  boolean getInfoOfTime(String startTime, String endTime)
+    public ArrayList<HashMap> getAll()
+    {
+        if (!db.query("select * from journal"))
+        {
+            return null;
+        }
+
+        return db.getResultList();
+    }
+
+    public ArrayList<HashMap> getInfoOfTime(String startTime, String endTime)
     {
         // simple insertion
         String q;
@@ -30,10 +42,14 @@ public class Journal {
                 + "((begin_time<=to_timestamp('" + startTime + "', 'YY/MM/DD HH24:MI:SS')"
                 + " and end_time>to_timestamp('" + startTime + "', 'YY/MM/DD HH24:MI:SS'))"
                 + " or begin_time<=to_timestamp('" + endTime + "', 'YY/MM/DD HH24:MI:SS'))";
-        return db.query(q);
+        if (!db.query(q))
+        {
+            return null;
+        }
+        return db.getResultList();
     }
 
-    public  boolean getInfoOfTime(int accId, int resId, String startTime, String endTime)
+    public ArrayList<HashMap> getInfoOfTime(int accId, int resId, String startTime, String endTime)
     {
         // simple insertion
         String q;
@@ -43,10 +59,14 @@ public class Journal {
                 + " and end_time>to_timestamp('" + startTime + "', 'YY/MM/DD HH24:MI:SS'))"
                 + " or begin_time<to_timestamp('" + endTime + "', 'YY/MM/DD HH24:MI:SS'))"
                 + "and (a.id=" + accId + " and r.id=" + resId + ")";
-        return db.query(q);
+        if (!db.query(q))
+        {
+            return null;
+        }
+        return db.getResultList();
     }
 
-    public  boolean getInfoOfTime(int accId, String startTime, String endTime)
+    public ArrayList<HashMap> getInfoOfTime(int accId, String startTime, String endTime)
     {
         // simple insertion
         String q;
@@ -56,10 +76,14 @@ public class Journal {
                 + " and end_time>to_timestamp('" + startTime + "', 'YY/MM/DD HH24:MI:SS'))"
                 + " or begin_time<to_timestamp('" + endTime + "', 'YY/MM/DD HH24:MI:SS'))"
                 + "and (a.id=" + accId + " )";
-        return db.query(q);
+        if (!db.query(q))
+        {
+            return null;
+        }
+        return db.getResultList();
     }
 
-    public  boolean getInfoOfTimeByRes(int resId, String startTime, String endTime)
+    public ArrayList<HashMap> getInfoOfTimeByRes(int resId, String startTime, String endTime)
     {
         // simple insertion
         String q;
@@ -69,17 +93,29 @@ public class Journal {
                 + " and end_time>to_timestamp('" + startTime + "', 'YY/MM/DD HH24:MI:SS'))"
                 + " or begin_time<to_timestamp('" + endTime + "', 'YY/MM/DD HH24:MI:SS'))"
                 + "and (r.id=" + resId + " )";
-        return db.query(q);
+        if (!db.query(q))
+        {
+            return null;
+        }
+        return db.getResultList();
+
     }
 
-    public  boolean remove(int accId, int resID, boolean notify)
+    public boolean remove(int accId, int resID, String uName, String time, String res)
     {
-        if (notify)
+
+        if (db.query("delete from journal where ACCOUNT_ID=" + accId + " and RESOURCE_ID=" + resID))
         {
             // !get info about time for 'accId' and 'resId'
             //send mail to user with 'accId'
-            System.out.println("user " + accId + " has notified and removed from journal");
+            System.out.println("user " + uName + "( " + time + " from " + res + " )" + " has notified and removed from journal");
+            return true;
         }
+        return false;
+    }
+
+    public boolean remove(int accId, int resID)
+    {
         return db.query("delete from journal where ACCOUNT_ID=" + accId + " and RESOURCE_ID=" + resID);
     }
 
@@ -94,13 +130,14 @@ public class Journal {
         return db.query(q);
     }
 
-    public  boolean reserveRes(int accId, int resId, String startTime, String endTime)
+    public int reserveRes(int accId, int resId, String startTime, String endTime)
     {
+        try
+        {
         boolean f = true;
         boolean isLowPriority = true;
-        f = f && getInfoOfTimeByRes(resId, startTime, endTime);
-        ArrayList<HashMap> users = (ArrayList<HashMap>) db.getResultList().clone();
-        Account acc=new Account();
+        ArrayList<HashMap> users = (ArrayList<HashMap>) getInfoOfTimeByRes(resId, startTime, endTime).clone();
+        Account acc = new Account();
         for (HashMap u : users)
         {
             System.out.println(acc.getPriority(accId) + "<=" + acc.getPriority(u.get("LOGIN").toString()));
@@ -113,20 +150,28 @@ public class Journal {
         {
             //WARNING not so high priority, you hasn't reserved
             System.out.println("sorry, you havn't enough rights to do this");
-            return false;
+            return 0;
         } else
         {
             for (HashMap u : users)
             {
-//                removeFromJournal(Integer.parseInt(u.get("ACCOUNT_ID").toString()),
-//                        Integer.parseInt(u.get("RESOURCE_ID").toString()),true);
-                System.out.println("user " + u.get("ACCOUNT_ID") + " has notified and removed from journal");
-
+                remove(Integer.parseInt(u.get("ACCOUNT_ID").toString()),
+                        Integer.parseInt(u.get("RESOURCE_ID").toString()), u.get("NAME").toString(),
+                        "from " + u.get("BEGIN_TIME") + " to " + u.get("END_TIME"), u.get("TITLE").toString());
             }
-            //addRecord2Journal(accId, resId, startTime, endTime);
+            add(accId, resId, startTime, endTime);
             System.out.println("record ADDED");
-            return true;
+            return 1;
+        }
+        }catch(NullPointerException ex)
+        {
+            // null error is here
+            return -1;
+        }
+        catch (Exception e)
+        {
+            //error is here
+            return -1;
         }
     }
-
 }

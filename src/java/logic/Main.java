@@ -27,18 +27,17 @@ public class Main
          *  return -1 if faild
          */
         String s;
-        Account acc=new Account();
-        Resource res=new Resource();
+        Account acc = new Account();
+        Resource res = new Resource();
         Role role = new Role();
-        Journal jrn=new Journal();
+        Journal jrn = new Journal();
 
         if ((s = acc.autorize("bereg", "yDybebf73")) != null)
         {
             System.out.println(s);
             System.out.println(acc.getPriority());
 
-        }
-        else
+        } else
         {
             System.out.println("invalid login/password");
         }
@@ -76,7 +75,7 @@ public class Main
         System.out.println(acc.isUnique("moroz2"));
 
         System.out.println("---- accounts -----");
-        for (HashMap t:acc.getAll())
+        for (HashMap t : acc.getAll())
         {
             System.out.println(t);
         }
@@ -97,9 +96,11 @@ public class Main
 
         System.out.println("---- journal  -----");
 //        RMCore.getInstance().getInfoOfTime(1,1,"2003/12/13 15:00:00","2003/12/13 18:10:00");
-        jrn.reserveRes(49, 1,"2003/12/13 15:00:00","2003/12/13 18:10:00");
-        
+        jrn.reserveRes(1, 4, "2003/12/13 16:30:00", "2003/12/13 17:00:00");
+        for (HashMap t : jrn.getInfoOfTime(1, "2003/12/13 16:30:00", "2003/12/13 17:00:00"))
+        {
+            System.out.println(t);
+        }
 
     }
-
 }
