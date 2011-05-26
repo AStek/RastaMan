@@ -165,14 +165,7 @@ public class Role implements IRole
      */
     public boolean setResRole(int resId, int roleId)
     {
-
-        if (db.query("insert into res_role values(null,'" + resId + "','" + roleId + "')"))
-        {
-            return true;
-        } else
-        {
-            return false;
-        }
+        return db.query("insert into res_role values(null,'" + resId + "','" + roleId + "')");
     }
 
     /**
@@ -186,12 +179,6 @@ public class Role implements IRole
      */
     public boolean rmvResRole(int resId, int roleId)
     {
-        if (db.query("delete from res_role where res_id=" + resId + " and role_id=" + roleId))
-        {
-            return true;
-        } else
-        {
-            return false;
-        }
+        return db.query("delete from res_role where res_id=" + resId + " and role_id=" + roleId);
     }
 }

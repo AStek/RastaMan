@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author adm
+ * @author Александр
  */
 public interface IRole {
 

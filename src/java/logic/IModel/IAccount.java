@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author Александр
+ * @author adm
  */
 public interface IAccount {
 

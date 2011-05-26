@@ -13,7 +13,7 @@ import logic.DB;
  *
  * @author adm
  */
-public class Account implements IAccount
+public class Account implements IAccount, IAccount, IAccount
 {
 
     private DB db = null;
@@ -164,13 +164,7 @@ public class Account implements IAccount
     public boolean isUnique(String login)
     {
         db.query("select * from account where login='" + login + "'");
-        if (db.getResultList().size() == 1)
-        {
-            return true;
-        } else
-        {
-            return false;
-        }
+        return db.getResultList().size() == 1?true:false;
     }
 
     /**

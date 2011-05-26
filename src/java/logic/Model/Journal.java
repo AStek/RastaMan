@@ -10,10 +10,11 @@ import java.util.HashMap;
 import logic.DB;
 
 /**
- *
- * @author adm
+ *Класс управления рассписанием
+ * 
+ * @author Александр
  */
-public class Journal implements IJournal
+public class Journal implements IJournal, IJournal
 {
 
     private DB db = null;
@@ -23,6 +24,10 @@ public class Journal implements IJournal
         db = DBcontroll.getInstance();
     }
 
+    /**
+     * Возвращает все существующие записи
+     * @return ArrayList<HashMap>
+     */
     public ArrayList<HashMap> getAll()
     {
         if (!db.query("select * from journal"))
@@ -33,6 +38,14 @@ public class Journal implements IJournal
         return db.getResultList();
     }
 
+    /**
+     * Возвращает все строки по указанному диапазону дат
+     *
+     * @param startTime
+     * @param endTime
+     * @return ArrayList<HashMap>
+     * Добавил Александр
+     */
     public ArrayList<HashMap> getInfoOfTime(String startTime, String endTime)
     {
         // simple insertion
@@ -49,6 +62,15 @@ public class Journal implements IJournal
         return db.getResultList();
     }
 
+    /**
+     * Возвращает строки по указанному диапазону дат для пользователя и для указанного ресурса
+     * @param accId
+     * @param resId
+     * @param startTime
+     * @param endTime
+     * @return ArrayList<HashMap>
+     * Добавил Александр
+     */
     public ArrayList<HashMap> getInfoOfTime(int accId, int resId, String startTime, String endTime)
     {
         // simple insertion
@@ -66,6 +88,14 @@ public class Journal implements IJournal
         return db.getResultList();
     }
 
+    /**
+     * Возвращает информацию по указанному диапазону дат для указанного пользователя
+     * @param accId
+     * @param startTime
+     * @param endTime
+     * @return ArrayList<HashMap>
+     * Добавил Александр
+     */
     public ArrayList<HashMap> getInfoOfTime(int accId, String startTime, String endTime)
     {
         // simple insertion
@@ -83,6 +113,14 @@ public class Journal implements IJournal
         return db.getResultList();
     }
 
+    /**
+     * Возвращает информацию по указанному ресурсу и диапазону дат
+     * @param resId
+     * @param startTime
+     * @param endTime
+     * @return ArrayList<HashMap>
+     * Добавил Александр
+     */
     public ArrayList<HashMap> getInfoOfTimeByRes(int resId, String startTime, String endTime)
     {
         // simple insertion
@@ -101,7 +139,18 @@ public class Journal implements IJournal
 
     }
 
-    public boolean remove(int accId, int resID, String uName, String time, String res)
+    /**
+     * Удаляет строку с оповещением пользователя об удалении из расписания
+     * @param accId
+     * @param resID
+     * @param uName
+     * @param time
+     * @param res
+     * @param mail
+     * @return boolean
+     * Добавил Александр
+     */
+    public boolean remove(int accId, int resID, String uName, String time, String res, String mail)
     {
 
         if (db.query("delete from journal where ACCOUNT_ID=" + accId + " and RESOURCE_ID=" + resID))
@@ -114,11 +163,28 @@ public class Journal implements IJournal
         return false;
     }
 
+    /**
+     * Удаляет запись из журнала
+     * @param accId
+     * @param resID
+     * @return
+     * Добавил Александр
+     */
     public boolean remove(int accId, int resID)
     {
         return db.query("delete from journal where ACCOUNT_ID=" + accId + " and RESOURCE_ID=" + resID);
     }
 
+    /**
+     * не безопасное добавлние, для внутренних нужд.
+     *
+     * @param accId
+     * @param resId
+     * @param startTime
+     * @param endTime
+     * @return boolean
+     * Добавил Александр
+     */
     private boolean add(int accId, int resId, String startTime, String endTime)
     {
         String q = "insert into journal values("
@@ -130,45 +196,56 @@ public class Journal implements IJournal
         return db.query(q);
     }
 
+    /**
+     * Перерезервирует занятость для указанного ресурса указанным пользователем на указанный диапазон
+     * если ресурс небыл занят добавляет новю запись.
+     * 
+     * @param accId
+     * @param resId
+     * @param startTime
+     * @param endTime
+     * @return int если успешно =1 если не возможно перерегистрировать =0 если ошибка =-1
+     * Добавил Александр
+     */
     public int reserveRes(int accId, int resId, String startTime, String endTime)
     {
         try
         {
-        boolean f = true;
-        boolean isLowPriority = true;
-        ArrayList<HashMap> users = (ArrayList<HashMap>) getInfoOfTimeByRes(resId, startTime, endTime).clone();
-        Account acc = new Account();
-        for (HashMap u : users)
-        {
-            System.out.println(acc.getPriority(accId) + "<=" + acc.getPriority(u.get("LOGIN").toString()));
-            if (acc.getPriority(accId) <= acc.getPriority(u.get("LOGIN").toString()))
-            {
-                isLowPriority = false;
-            }
-        }
-        if (!isLowPriority)
-        {
-            //WARNING not so high priority, you hasn't reserved
-            System.out.println("sorry, you havn't enough rights to do this");
-            return 0;
-        } else
-        {
+            boolean f = true;
+            boolean isLowPriority = true;
+            ArrayList<HashMap> users = (ArrayList<HashMap>) getInfoOfTimeByRes(resId, startTime, endTime).clone();
+            Account acc = new Account();
             for (HashMap u : users)
             {
-                remove(Integer.parseInt(u.get("ACCOUNT_ID").toString()),
-                        Integer.parseInt(u.get("RESOURCE_ID").toString()), u.get("NAME").toString(),
-                        "from " + u.get("BEGIN_TIME") + " to " + u.get("END_TIME"), u.get("TITLE").toString());
+                System.out.println(acc.getPriority(accId) + "<=" + acc.getPriority(u.get("LOGIN").toString()));
+                if (acc.getPriority(accId) <= acc.getPriority(u.get("LOGIN").toString()))
+                {
+                    isLowPriority = false;
+                }
             }
-            add(accId, resId, startTime, endTime);
-            System.out.println("record ADDED");
-            return 1;
-        }
-        }catch(NullPointerException ex)
+            if (!isLowPriority)
+            {
+                //WARNING not so high priority, you hasn't reserved
+                System.out.println("sorry, you hasn't enough rights to do this");
+                return 0;
+            } else
+            {
+                for (HashMap u : users)
+                {
+                    remove(Integer.parseInt(u.get("ACCOUNT_ID").toString()),
+                            Integer.parseInt(u.get("RESOURCE_ID").toString()), u.get("NAME").toString(),
+                            "from " + u.get("BEGIN_TIME") + " to " + u.get("END_TIME"),
+                            u.get("TITLE").toString(), u.get("MAIL").toString());
+                }
+                add(accId, resId, startTime, endTime);
+                System.out.println("record ADDED");
+                return 1;
+            }
+        } catch (NullPointerException ex)
         {
             // null error is here
             return -1;
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             //error is here
             return -1;

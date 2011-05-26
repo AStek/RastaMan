@@ -22,6 +22,7 @@ public class Resource implements IResource
     {
         db = DBcontroll.getInstance();
     }
+
     /**
      * Возвращает ресурс ро указанному идентификатору
      * @param int id
@@ -81,12 +82,7 @@ public class Resource implements IResource
      */
     public boolean add(String title)
     {
-        if (!db.query("insert into resources values(null,'" + title + "')"))
-        {
-            //error is here
-            return false;
-        }
-        return true;
+        return db.query("insert into resources values(null,'" + title + "')");
     }
 
     /**
@@ -118,15 +114,10 @@ public class Resource implements IResource
      */
     public boolean setById(int id, String title)
     {
-        if (db.query("UPDATE resources SET title='" + title + "' WHERE id=" + id))
-        {
-            return true;
-        } else
-        {
-            return false;
-        }
+        return db.query("UPDATE resources SET title='" + title + "' WHERE id=" + id);
     }
-        /**
+
+    /**
      * Связывает ресурс с ролью или роль с ресурсом по идентификаторам
      *
      * @param int resId
@@ -153,5 +144,4 @@ public class Resource implements IResource
     {
         return new Role().rmvResRole(resId, roleId);
     }
-
 }
