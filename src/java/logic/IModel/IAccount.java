@@ -48,6 +48,12 @@ public interface IAccount {
     ArrayList<HashMap> getAll();
 
     /**
+     * возвращает информацию о пользователе по логину
+     * @return null если не удалось найти
+     */
+    HashMap getByLogin(String login);
+
+    /**
      * Возвращает учетную запись пользователя по имени и роли
      * @param name String Строка с именем, не более 50 символ
      * @param role String Строка с названием роли, не более 20 символ
@@ -56,6 +62,16 @@ public interface IAccount {
      * Добавлен Андреем 22.05.2011 12:05
      */
     ArrayList<HashMap> getByNameAndRole(String name, String role);
+
+    /**
+     * Возвращает информацию о используемых ресурсах, электронной почте и о занимаемой роли
+     * @param login
+     * @return HashMap ключ "MAIL" - почта, "ROLE" - роль, "RESOURCES"-ArrayList<String> -список ресурсов
+     * null - если пользователь не найден или произошла ошибка
+     *
+     * Добавил Александр
+     */
+    HashMap getInfo(String login);
 
     /**
      * Получение приоритета пользователя
