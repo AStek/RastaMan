@@ -94,13 +94,22 @@ public class Main
         System.out.println("---- get roles of resource  -----");
         System.out.println(res.getRoleOfRes(1));
 
+        System.out.println("---- get acc by login  -----");
+        System.out.println(acc.getByLogin("mororz"));
+
         System.out.println("---- journal  -----");
 //        RMCore.getInstance().getInfoOfTime(1,1,"2003/12/13 15:00:00","2003/12/13 18:10:00");
+        System.out.println("---- journal  -----");
+
+        System.out.println("---- journal  get info-----");
         jrn.reserveRes(1, 4, "2003/12/13 16:30:00", "2003/12/13 17:00:00");
         for (HashMap t : jrn.getInfoOfTime(1, "2003/12/13 16:30:00", "2003/12/13 17:00:00"))
         {
             System.out.println(t);
         }
+        
+        System.out.println("---- get acc info  -----");
+        System.out.println(acc.getInfo("moroz"));
 
     }
 }

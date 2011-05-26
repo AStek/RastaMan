@@ -11,7 +11,7 @@ import logic.DB;
 
 /**
  *
- * @author adm
+ * @author Александр
  */
 public class Resource implements IResource
 {

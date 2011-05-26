@@ -9,7 +9,7 @@ import logic.DB;
 
 /**
  *
- * @author adm
+ * @author Александр
  */
 public class DBcontroll {
    private static DB instance = null;

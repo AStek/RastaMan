@@ -14,7 +14,7 @@ import logic.DB;
  * 
  * @author Александр
  */
-public class Journal implements IJournal, IJournal
+public class Journal implements IJournal
 {
 
     private DB db = null;

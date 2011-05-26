@@ -4,6 +4,7 @@
  */
 package logic.Model;
 
+import logic.IModel.IAccaount;
 import logic.IModel.IAccount;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,9 +12,9 @@ import logic.DB;
 
 /**
  *
- * @author adm
+ * @author Александр
  */
-public class Account implements IAccount, IAccount, IAccount
+public class Account implements IAccount
 {
 
     private DB db = null;
@@ -164,7 +165,7 @@ public class Account implements IAccount, IAccount, IAccount
     public boolean isUnique(String login)
     {
         db.query("select * from account where login='" + login + "'");
-        return db.getResultList().size() == 1?true:false;
+        return db.getResultList().size() == 1 ? true : false;
     }
 
     /**
@@ -181,4 +182,64 @@ public class Account implements IAccount, IAccount, IAccount
         return db.getResultList();
     }
 
+    /**
+     * возвращает информацию о пользователе по логину
+     * @return null если не удалось найти
+     */
+    public HashMap getByLogin(String login)
+    {
+        if (!db.query("select * from account where login='" + login + "'"))
+        {
+            return null;
+        }
+        try
+        {
+            HashMap hm = db.getResultList().get(0);
+            return hm;
+        } catch (NullPointerException e)
+        {
+            return null;
+        } catch (Exception e)
+        {
+            return null;
+        }
+    }
+/**
+ * Возвращает информацию о используемых ресурсах, электронной почте и о занимаемой роли
+ * @param login
+ * @return HashMap ключ "MAIL" - почта, "ROLE" - роль, "RESOURCES"-ArrayList<String> -список ресурсов
+ *          null - если пользователь не найден или произошла ошибка
+ *
+ * Добавил Александр
+ */
+    public HashMap getInfo(String login)
+    {
+        String q = "select a.mail as mail,r.title as res,o.title as role from "
+                + "account a, journal j, resources r,role o where a.id=j.account_id and "
+                + "r.id=j.resource_id and a.ROLE_id=o.id and login='" + login + "'";
+        if (!db.query(q))
+        {
+            //Q error
+            return null;
+        }
+        ArrayList<HashMap> users = db.getResultList();
+        HashMap hm = new HashMap();
+        try
+        {
+            hm.put("MAIL", users.get(0).get("MAIL"));
+            hm.put("ROLE", users.get(0).get("ROLE"));
+        } catch (IndexOutOfBoundsException e)
+        {
+            //user not found
+            return null;
+        }
+        ArrayList<String> ress = new ArrayList();
+        for (HashMap u : users)
+        {
+            ress.add(u.get("RES").toString());
+        }
+        hm.put("RESOURCES", ress.clone());
+
+        return hm;
+    }
 }

@@ -11,7 +11,7 @@ import logic.DB;
 
 /**
  *
- * @author Администратор
+ * @author Александр
  */
 public class Role implements IRole
 {
