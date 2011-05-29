@@ -1,23 +1,22 @@
-INSERT INTO   "ROLE" VALUES ( 1, 'Администратор'	)
+INSERT INTO   "ROLE" VALUES ( 1, 'Администратор'	, 0)
 /
-INSERT INTO   "ROLE" VALUES ( 2, 'Архитектор'		)
+INSERT INTO   "ROLE" VALUES ( 2, 'Архитектор'		, 3)
 /
-INSERT INTO   "ROLE" VALUES ( 3, 'Ведущий программист'	)
+INSERT INTO   "ROLE" VALUES ( 3, 'Ведущий программист'	, 2)
 /
-INSERT INTO   "ROLE" VALUES ( 4, 'Ведущий дизайнер'	)
+INSERT INTO   "ROLE" VALUES ( 4, 'Ведущий дизайнер'	, 2)
 /
-INSERT INTO   "ROLE" VALUES ( 5, 'Программист'		)
+INSERT INTO   "ROLE" VALUES ( 5, 'Программист'		, 1)
 /
-INSERT INTO   "ROLE" VALUES ( 6, 'Дизайнер'		)
+INSERT INTO   "ROLE" VALUES ( 6, 'Дизайнер'		, 1)
 /
-INSERT INTO   "ROLE" VALUES ( 7, 'Менеджер'		)
+INSERT INTO   "ROLE" VALUES ( 7, 'Менеджер'		, 3)
 /
 INSERT INTO   "ACCOUNT" VALUES ( 1,
 				 'Василий Пупкин',
 				 'vasilipup',
 				 '098qwerty',
 				 1,
-				 0,
 				 'vasilipup@mail.non'	)
 /
 INSERT INTO   "ACCOUNT" VALUES ( 2,
@@ -25,7 +24,6 @@ INSERT INTO   "ACCOUNT" VALUES ( 2,
 				 'vlad_kramar',
 				 'qE4Sfs4',
 				 2,
-				 3,
 				 'vlad_kramar@mail.non'	)
 /
 INSERT INTO   "ACCOUNT" VALUES ( 3,
@@ -33,7 +31,6 @@ INSERT INTO   "ACCOUNT" VALUES ( 3,
 				 'moroz',
 				 'ydFhj3S73d',
 				 7,
-				 3,
 				 'moroz@mail.non'	)
 /
 INSERT INTO   "ACCOUNT" VALUES ( 4,
@@ -41,7 +38,6 @@ INSERT INTO   "ACCOUNT" VALUES ( 4,
 				 'ermol',
 				 'jf76hjj4Sf',
 				 3,
-				 2,
 				 'ermol@mail.non'	)
 /
 INSERT INTO   "ACCOUNT" VALUES ( 5,
@@ -49,7 +45,6 @@ INSERT INTO   "ACCOUNT" VALUES ( 5,
 				 'p_vasisualiev',
 				 '78Djd3Dhs',
 				 4,
-				 2,
 				 'p_vasisualiev@mail.non')
 /
 INSERT INTO   "ACCOUNT" VALUES ( 6,
@@ -57,7 +52,6 @@ INSERT INTO   "ACCOUNT" VALUES ( 6,
 				 'bereg',
 				 'yDybebf73',
 				 5,
-				 1,
 				 'bereg@mail.non'	)
 /
 INSERT INTO   "ACCOUNT" VALUES ( 7,
@@ -65,7 +59,6 @@ INSERT INTO   "ACCOUNT" VALUES ( 7,
 				 'voron',
 				 'Jdsgh7r63S',
 				 6,
-				 1,
 				 'voron@mail.non'	)
 /
 INSERT INTO   "ACCOUNT" VALUES ( 8,
@@ -73,7 +66,6 @@ INSERT INTO   "ACCOUNT" VALUES ( 8,
 				 'nickifor',
 				 'dj82djhfFF',
 				 7,
-				 3,
 				 'nickifor@mail.non'	)
 /
 INSERT INTO   "RESOURCES" VALUES ( 1, 'Кухня'			)
@@ -145,4 +137,6 @@ INSERT INTO   "RES_ROLE" VALUES ( 25,	5, 5 )
 INSERT INTO   "RES_ROLE" VALUES ( 26,	5, 6 )
 /
 INSERT INTO   "RES_ROLE" VALUES ( 27,	5, 7 )
+/
+COMMIT
 /
