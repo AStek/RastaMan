@@ -1,0 +1,169 @@
+/* 
+    Document   : style
+    Created on : 24 трав 2011, 15:57:37
+    Author     : andrey
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+
+body {
+
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    color: #000000;
+    background-color: #ffffff;
+}
+
+a{
+    color: #3333ff;
+}
+
+a:visited{
+    color:#3333ff;
+}
+
+a:active{
+    color: darkturquoise;
+}
+
+a:hover{
+    color: darkturquoise;
+}
+
+.block {
+    display: block;
+}
+
+#header, #footer, #menu, #main{
+    margin: 10px;
+    padding: 8px;
+}
+
+#header{
+    
+}
+
+#footer{
+    border-top: #000000 solid 1px;
+}
+
+#menu{
+    border-top: #000000 solid 1px;
+    border-bottom: #000000 solid 1px;
+}
+
+#main{
+    padding: 0;
+    padding-top: 8px;
+}
+
+#sidebar, #content{
+    display: inline-block;
+    margin-left: 8px;
+    padding: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+#sidebar{
+    /*width: 150px;*/
+    width:11%;
+    vertical-align: top;
+}
+
+#content{
+    border-left: black solid 1px;
+    /*width: 600px;*/
+    width:77%;
+}
+
+#content h1{
+    font-size: 16px;
+    color: #549abf;
+}
+
+label{
+    width: 100px;
+    font-weight: bold;
+    text-align: right;
+    display: inline-block;
+}
+
+#smb{
+    margin-left: 100px;
+}
+
+.timeline{
+    width:100%;
+    margin-top: 3px;
+    margin-bottom: 2px;
+}
+
+.timeline a{
+
+    text-decoration: none;
+}
+
+.timeline .timeline-block{
+    border-style: solid;
+    border-width: 1px;
+
+    margin: 0;
+    display: inline-block;
+    float:left;
+
+    border-right-color: #1a6a93;
+    border-left-color: #549abf;
+    border-bottom-color: #1a6a93;
+    border-top-color: #549abf;
+
+
+    background-color: #3fa2d4;
+    background-image: url(../img/tex2.png);
+    background-repeat: repeat-x;
+    text-align: center;
+    padding: 5px;
+    color: white;
+}
+
+.timeline .timeline-space{
+    border-style: hidden;
+    border-width: 0;
+    margin: 0;
+    float:left;
+    display: inline-block;
+
+    background-repeat: repeat-x;
+    height: 10px;
+}
+
+.timtline-table{
+    width: 100%;
+    margin-top: 2px;
+    border-top: #ffffff 2px solid;
+}
+
+.timtline-table td{
+    border-width: 0px;
+    border-style: hidden;
+    border-left-color: #3fa2d4;
+    border-left-style: solid;
+    border-left-width: 1px;
+    font-size: 10px;
+    text-align: left;
+    width:4.16%;
+}
+
+input, select {
+    font-size: 10px;
+    padding: 1px;
+}
