@@ -2,7 +2,7 @@ package Logger;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
-import sun.security.jca.GetInstance;
+
 
 /*
  * To change this template, choose Tools | Templates
@@ -16,8 +16,7 @@ import sun.security.jca.GetInstance;
 public class Main {
     public static void main(String[] args) throws UnsupportedEncodingException, FileNotFoundException
     {
-       LogErrorManager mgr = new LogErrorManager("log.log", false);
-
+        LogErrorManager mgr=LogErrorManager.getInstance();
         mgr.addError(ErrorItem.ERROR_INPUT, "Screen login", "login: \")' or 1 = 1\"");
         mgr.addError(ErrorItem.ERROR_INPUT, "Screen pass", "pass: \")' or 1 = 1\"");
         mgr.addError(ErrorItem.ERROR_COMMAND_FAIL, "API Layer", "record adding was fail");

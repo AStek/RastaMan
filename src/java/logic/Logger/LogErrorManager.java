@@ -4,7 +4,6 @@ package Logger;
  *
  * @author Elizabeth
  */
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -12,6 +11,21 @@ import java.util.ArrayList;
 
 public class LogErrorManager implements ErrorManager
 {
+    private static String path = "log.log";
+    private static Object instance = null;
+
+    public static void setpath(String path)
+    {
+        LogErrorManager.path = path;
+    }
+
+    public static LogErrorManager getInstance() throws FileNotFoundException, UnsupportedEncodingException
+    {
+        if (instance == null)
+            instance = new LogErrorManager(path, false);
+        return (LogErrorManager) instance;
+    }
+
     private ArrayList<ErrorItem> errors;
     private int maxCode;
     private FileLogger logger;
@@ -27,14 +41,13 @@ public class LogErrorManager implements ErrorManager
             logger.Write(i);
         }
         catch (IOException ex)
-             
         {
         }
         if (maxCode < code)
             maxCode = code;
     }
 
-    public LogErrorManager(String logPath, boolean truncate) throws UnsupportedEncodingException, FileNotFoundException
+    private LogErrorManager(String logPath, boolean truncate) throws UnsupportedEncodingException, FileNotFoundException
     {
         maxCode = ErrorItem.INFO_MESSAGE;
         errors = new ArrayList<ErrorItem>();
@@ -45,14 +58,15 @@ public class LogErrorManager implements ErrorManager
         return errors.size();
     }
 
-    public int getHighCide()
+    public int getHighCode()
     {
         return maxCode;
     }
 
     public ArrayList<ErrorItem> getErrorList()
     {
-        return errors;
+
+        return (ArrayList<ErrorItem>) errors.clone();
     }
 
     public ArrayList<ErrorItem> getErrorList(int code)
@@ -76,10 +90,8 @@ public class LogErrorManager implements ErrorManager
         }
         return ret;
     }
-
-    public int getHighCode() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-
+     public void Clear()
+        {
+          errors.clear();
+         }
 }
