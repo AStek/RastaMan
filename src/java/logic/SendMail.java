@@ -33,9 +33,9 @@ public class SendMail {
   public SendMail(String messageTo, String messageSubject, String messageBody)
   {
         email = CfgMgr.getValue("email");
-        password = CfgMgr.getValue("password");
+        password = CfgMgr.getValue("mail_password");
         smtp_server = CfgMgr.getValue("smtp_server");
-        port = CfgMgr.getValue("port");
+        port = CfgMgr.getValue("mail_port");
 
         this.messageTo = messageTo;
         this.messageSubject = messageSubject;
@@ -55,6 +55,7 @@ public class SendMail {
     prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
     prop.put("mail.smtp.auth", "true");
     prop.put("mail.smtp.port", port);
+    //prop.put("mail.debug", "true");
 
     //Создаем новую сессию для текущих параметров
     Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator(){
@@ -83,6 +84,8 @@ public class SendMail {
 
     } catch(MessagingException e){
         //To-Do: Error manager hear
+        String s = e.toString();
+        System.err.print(s);
     }
   }
 

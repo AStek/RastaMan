@@ -3,6 +3,7 @@ package logic.API;
 import java.util.*;
 import logic.IModel.IAccount;
 import logic.Model.Account;
+import logic.SendMail;
 import logic.validator;
 
 /**
@@ -31,7 +32,7 @@ public class AccountAPI {
         Boolean loginFlag = validator.validateString(login, 20) && !validator.hasSpecialChars(login);
         Boolean passwordFlag = validator.validateString(password, 20) && !validator.hasSpecialChars(password);
         Boolean nameFlag = validator.validateString(name, 50) && !validator.hasSpecialChars(name);
-        Boolean emailFlag = validator.validateString(email, 20) && !validator.hasSpecialChars(email);
+        Boolean emailFlag = validator.validateEmail(email);
         Boolean roleIdFlag = validator.validateInteger(roleId);
 
         if (loginFlag && passwordFlag && nameFlag && emailFlag  && roleIdFlag){
@@ -178,7 +179,7 @@ public class AccountAPI {
         Boolean loginFlag = validator.validateString(login, 20) && !validator.hasSpecialChars(login);
         Boolean passwordFlag = validator.validateString(password, 20) && !validator.hasSpecialChars(password);
         Boolean nameFlag = validator.validateString(name, 50) && !validator.hasSpecialChars(name);
-        Boolean emailFlag = validator.validateString(email, 20) && !validator.hasSpecialChars(email);
+        Boolean emailFlag = validator.validateEmail(email);
         Boolean roleIdFlag = validator.validateInteger(roleId);
         Boolean idFlag = validator.validateInteger(id);
 
@@ -192,4 +193,30 @@ public class AccountAPI {
         }
     }
 
+    public HashMap getInfo(String login)
+    {
+        Boolean s = !validator.hasSpecialChars(login);
+        Boolean l = validator.validateString(login, 20);
+        if (s && l){
+            return model.getInfo(login);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Восстановление пароля
+     * @param String login
+     * @return
+     * Добавил Андрей
+     */
+    public boolean resurection(String login){
+        HashMap info = model.getInfo(login);
+        if (info==null){return false;}
+        String text = "<b>Восстановление пароля на ресурсе рассписания</b><br>Ваш пароль: ";
+        text = text+info.get("PASSWORD").toString();
+        SendMail mail = new SendMail(info.get("EMAIL").toString(), "Восстановление пароля", text);
+        mail.sendSSLEmail();
+        return true;
+    }
 }

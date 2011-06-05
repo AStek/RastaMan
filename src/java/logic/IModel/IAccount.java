@@ -98,7 +98,7 @@ public interface IAccount {
      *
      * Добавлен Андреем 21.05.2011 19:52
      */
-    boolean setById(int id, String login, String password, String name, int roleId, int priority, String email);
+    boolean setById(int id, String login, String password, String name, int roleId, String email);
 
     public HashMap getInfo(String login);
 }

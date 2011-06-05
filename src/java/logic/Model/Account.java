@@ -29,7 +29,8 @@ public class Account implements IAccount
     {
 //        db=new DB();
         String q = null;
-        q = "select * from Account where login='" + login + "' and password='" + paswd + "'";
+        //q = "select a.*,r.priority as r_prior from Account a,role r where a.id=r.id and login='" + login + "' and password='" + paswd + "'";
+        q = "select * from Account where  login='" + login + "' and password='" + paswd + "'";
         db.query(q);
         if (db.getRowcount() == 0)
         {
@@ -50,7 +51,7 @@ public class Account implements IAccount
     {
         try
         {
-            return Integer.valueOf(db.getResultList().get(0).get("PRIORITY").toString());
+            return Integer.valueOf(db.getResultList().get(0).get("R_PRIOR").toString());
         } catch (Exception e)
         {
             return -1;
@@ -66,7 +67,7 @@ public class Account implements IAccount
      */
     public int getPriority(String login)
     {
-        db.query("select priority from Account where login='" + login + "'");
+        db.query("select r.priority from Account a,role r where a.id=r.id and a.login='" + login + "'");
         if (db.getRowcount() == 0)
         {
             return -1;
@@ -76,7 +77,7 @@ public class Account implements IAccount
 
     public int getPriority(int id)
     {
-        db.query("select priority from Account where id='" + id + "'");
+        db.query("select r.priority from Account a,role r where a.id=r.id and a.id='" + id + "'");
         if (db.getRowcount() == 0)
         {
             return -1;
@@ -113,19 +114,17 @@ public class Account implements IAccount
      * @param password String Строка с паролем, не более 20 символ
      * @param name String Строка с именем, не более 50 символ
      * @param roleId Integer Идентификатор роли
-     * @param priority Integer Приоритет
      * @param email String E-Mail адрес, не более 32 символ
      * @return Boolean
      * @throws SQLException
      *
      *  Добавлен Андреем 21.05.2011 19:52
      */
-    public boolean setById(int id, String login, String password, String name, int roleId, int priority, String email)
+    public boolean setById(int id, String login, String password, String name, int roleId,  String email)
     {
         return db.query("UPDATE account SET NAME='" + name + "', "
-                + "LOGIN='" + login + "', PASSWORD='" + password + "', ROLE_ID=" + Integer.toString(roleId)
-                + ", PRIORITY=" + Integer.toString(priority) + ", "
-                + "EMAIL='" + email + "'  WHERE ID=" + Integer.toString(id) + ";");
+                + "LOGIN='" + login + "', PASSWORD='" + password + "', ROLE_ID=" + Integer.toString(roleId)+ ","
+                + "EMAIL='" + email + "'  WHERE ID=" + Integer.toString(id));
     }
 
     /**
@@ -138,7 +137,7 @@ public class Account implements IAccount
      */
     public boolean deleteById(int id)
     {
-        return db.query("DELETE FROM account WHERE ID=" + Integer.toString(id) + ";");
+        return db.query("DELETE FROM account WHERE ID=" + Integer.toString(id));
     }
 
     /**
@@ -197,8 +196,15 @@ public class Account implements IAccount
             //error is here
             return null;
         }
-        
+        try
+        {
         return db.getResultList().get(0);
+        }
+        catch (IndexOutOfBoundsException e)
+        {
+            System.out.println("not found");
+            return null;
+        }
     }
 
 }

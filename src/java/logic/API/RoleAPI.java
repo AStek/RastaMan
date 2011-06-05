@@ -72,7 +72,7 @@ public class RoleAPI {
                 && !validator.hasSpecialChars(title)
                 && validator.validateInteger(priority);
         if (titleFlag){
-            return model.add(title, priority);
+            return model.add(title, Integer.parseInt(priority));
         } else {
             return false;
         }
@@ -83,7 +83,7 @@ public class RoleAPI {
      * @param String id
      * @return String
      */
-    public String getById(String id)
+    public HashMap getById(String id)
     {
         if (validator.validateInteger(id)){
             return model.getById(Integer.parseInt(id));
@@ -146,13 +146,14 @@ public class RoleAPI {
      * @return boolean
      *
      */
-    public boolean setById(String id, String title)
+    public boolean setById(String id, String title, String weight)
     {
         Boolean titleFlag = validator.validateString(title, 50)
                 && !validator.hasSpecialChars(title)
-                && validator.validateInteger(id);
+                && validator.validateInteger(id)
+                && validator.validateInteger(weight);
         if (titleFlag){
-            return model.setById(Integer.parseInt(id), title);
+            return model.setById(Integer.parseInt(id), title, Integer.parseInt(weight));
         } else {
             return false;
         }

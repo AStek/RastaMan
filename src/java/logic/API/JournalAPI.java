@@ -32,7 +32,7 @@ public class JournalAPI {
     public ArrayList<HashMap> getInfoOfTime(String startTime, String endTime)
     {
         if (validator.validateDateTime(startTime) && validator.validateDateTime(endTime)){
-            return getInfoOfTime(startTime, endTime);
+            return model.getInfoOfTime(startTime, endTime);
         } else{
             return null;
         }
@@ -165,4 +165,19 @@ public class JournalAPI {
         }
     }
 
+    public HashMap getInfo(String id) {
+        if (validator.validateInteger(id)){
+            return model.getInfo(Integer.parseInt(id));
+        } else {
+            return null;
+        }
+    }
+
+    public boolean remove(String id){
+        if (validator.validateInteger(id)){
+            return model.remove(Integer.parseInt(id));
+        } else {
+            return false;
+        }
+    }
 }

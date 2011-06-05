@@ -30,6 +30,9 @@
             <div class="block" id="content">
                 <h1>Вход</h1>
 
+                <div class="error_mess">
+                    *Ошибка авторизации
+                </div>
                 <form method="POST">
                         <label>Логин:</label><input type="text" name="login"><br>
                         <label>Пароль:</label><input type="password" name="pass"><br>

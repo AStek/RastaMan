@@ -119,7 +119,7 @@ public class ResourceAPI {
                 &&
             !validator.hasSpecialChars(title)
                 &&
-            validator.validateString(title, 20)
+            validator.validateString(title, 30)
             ){
             return model.setById(Integer.parseInt(id), title);
         } else {
@@ -144,4 +144,7 @@ public class ResourceAPI {
         }
     }
 
+    public ArrayList<HashMap> getAll(){
+        return model.getAll();
+    }
 }

@@ -30,9 +30,9 @@ public interface IRole {
      *
      * Добавил Александр 23.05 23.00
      */
-    boolean add(String title, int resId);
+    public boolean add(String title, int prior, int resId);
 
-    public boolean add(String title,String prior);//-----------------<===[ prior string ! ]
+    public boolean add(String title,int prior);//-----------------<===[ prior string ! ]
 
 
     /**
@@ -49,7 +49,7 @@ public interface IRole {
      * @return String
      * Добавил Александр 23.05 22.30
      */
-    String getById(int id);
+    HashMap getById(int id);
 
     /**
      * возврвщает ресурсы назначеные роли
@@ -99,6 +99,7 @@ public interface IRole {
      *
      * добавил Александр 24.05 15:43
      */
+    public boolean setById(int id, String title, int prior);
     boolean setResRole(int resId, int roleId);
 
     public boolean setPriority(int id, int prior);

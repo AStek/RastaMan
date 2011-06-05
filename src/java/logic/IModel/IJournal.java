@@ -60,6 +60,7 @@ public interface IJournal {
      * Добавил Александр
      */
     ArrayList<HashMap> getInfoOfTimeByRes(int resId, String startTime, String endTime);
+    public HashMap getInfo(int id);
 
     /**
      * Удаляет строку с оповещением пользователя об удалении из расписания
@@ -82,6 +83,8 @@ public interface IJournal {
      * Добавил Александр
      */
     boolean remove(int accId, int resID);
+
+    public boolean remove(int Id);
 
     /**
      * Перерезервирует занятость для указанного ресурса указанным пользователем на указанный диапазон

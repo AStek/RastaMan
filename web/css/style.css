@@ -133,7 +133,7 @@ label{
     text-align: center;
     padding: 5px;
     color: white;
-    height: 15px;
+    overflow: hidden;
 }
 
 .timeline .timeline-space{
@@ -167,8 +167,36 @@ label{
 input, select {
     font-size: 10px;
     padding: 1px;
+    width: 108px;
 }
 
 .error_mess{
     color:red;
+    background-color: #ffe0e0;
+    border: #ff0033 1px solid;
+    padding: 8px;
+    margin: 5px;
+    padding-left: 36px;
+    background-image: url(../img/x1.png);
+    background-repeat: no-repeat;
+    background-position: 3px 3px;
+    height: 36px;
+}
+
+.attention {
+    color: #0000cc;
+    background-color: #efeffc;
+    border: #3300cc 1px solid;
+    padding: 12px;
+    margin: 5px;
+    padding-left: 36px;
+    background-image: url(../img/y1.png);
+    background-repeat: no-repeat;
+    background-position: 3px 3px;
+}
+
+.main_menu_item{
+    text-align: center;
+    display: inline-block;
+    float: left;
 }

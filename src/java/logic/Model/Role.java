@@ -14,13 +14,11 @@ import logic.DBcontroll;
  *
  * @author Администратор
  */
-public class Role implements IRole
-{
+public class Role implements IRole {
 
     private DB db = null;
 
-    public Role()
-    {
+    public Role() {
         db = DBcontroll.getInstance();
     }
 
@@ -30,27 +28,21 @@ public class Role implements IRole
      * @return String
      * Добавил Александр 23.05 22.30
      */
-    public String getById(int id)
-    {
-        if (db.query("select title from role where id=" + String.valueOf(id)) == false)
-        {
+    public HashMap getById(int id) {
+        if (db.query("select * from role where id=" + String.valueOf(id)) == false) {
             // error is here
             return null;
         }
-        return db.getResultList().get(0).get("TITLE").toString();
+        return db.getResultList().get(0);
     }
 
-
-    public boolean add(String title,String prior)
-    {
-        if (!db.query("insert into role values(null,'" + title + ","+prior+"')"))
-        {
+    public boolean add(String title, int prior) {
+        if (!db.query("insert into role values(null,'" + title + "'," + prior + ")")) {
             //error is here
             return false;
         }
         return true;
     }
-
 
     /**
      * Дбавляет роль
@@ -58,11 +50,8 @@ public class Role implements IRole
      * @return boolean
      * Добавил Александр 23.05 22.45
      */
-
-    public boolean add(String title)
-    {
-        if (!db.query("insert into role values(null,'" + title + ",0')"))
-        {
+    public boolean add(String title) {
+        if (!db.query("insert into role values(null,'" + title + "',0)")) {
             //error is here
             return false;
         }
@@ -77,21 +66,18 @@ public class Role implements IRole
      *
      * Добавил Александр 23.05 23.00
      */
-    public boolean add(String title, int resId)
-    {
+    public boolean add(String title, int prior, int resId) {
 
 
         boolean f = true;
-        try
-        {
-            f = f && db.query("insert into role values(null,'" + title + "')");
+        try {
+            f = f && db.query("insert into role values(null,'" + title + "'," + prior + ")");
             f = f && db.query("select id from role where title='" + title + "'");
             System.out.println(db.getResultList().get(0).get("ID").toString());
 
             Integer id = new Integer(db.getResultList().get(0).get("ID").toString());
             f = f && db.query("insert into res_role values(null,'" + resId + "','" + id + "')");
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.toString());
             //error is here
             return false;
@@ -106,10 +92,8 @@ public class Role implements IRole
 
      * Добавил Александр 23.05 23.06
      */
-    public boolean removeById(int id)
-    {
-        if (!db.query("delete from role where id=" + id))
-        {
+    public boolean removeById(int id) {
+        if (!db.query("delete from role where id=" + id)) {
             // error is here
             return false;
         }
@@ -122,10 +106,8 @@ public class Role implements IRole
      * @return ArrayList<HashMap>
      * Добавил Александр 19.05.2011 17:03
      */
-    public ArrayList<HashMap> getAll()
-    {
-        if (!db.query("Select * from role"))
-        {
+    public ArrayList<HashMap> getAll() {
+        if (!db.query("Select * from role")) {
             // error is here
             return null;
         }
@@ -139,10 +121,8 @@ public class Role implements IRole
      *
      * добавил Александр 24.05 15:01
      */
-    public ArrayList<HashMap> getResOfRole(int id)
-    {
-        if (!db.query("select e.ID,e.title from res_role,resources e,role r where e.id=Res_id and r.id=role_id and role_id=" + id))
-        {
+    public ArrayList<HashMap> getResOfRole(int id) {
+        if (!db.query("select e.ID,e.title from res_role,resources e,role r where e.id=Res_id and r.id=role_id and role_id=" + id)) {
             // error is here
             return null;
         }
@@ -157,27 +137,35 @@ public class Role implements IRole
      *
      * добавил Александр 24.05 15:09
      */
-    public boolean setById(int id, String title)
-    {
-        if (db.query("UPDATE role SET title='" + title + "' WHERE id=" + id))
-        {
+    public boolean setById(int id, String title) {
+        if (db.query("UPDATE role SET title='" + title + "' WHERE id=" + id)) {
             return true;
-        } else
-        {
-            return false;
         }
+
+        return false;
     }
 
-
-    public boolean setPriority(int id, int prior)
-    {
-        if (db.query("UPDATE role SET priority='" + prior + "' WHERE id=" + id))
-        {
+    /**
+     * изменяет название роли по идентификатору
+     * @param id
+     * @param title название роли
+     * @param prior приоритет
+     * @return boolean
+     *
+     */
+    public boolean setById(int id, String title, int prior) {
+        if (db.query("UPDATE role SET title='" + title + "', priority=" + prior + " WHERE id=" + id)) {
             return true;
-        } else
-        {
-            return false;
         }
+        return false;
+    }
+
+    public boolean setPriority(int id, int prior) {
+        if (db.query("UPDATE role SET priority='" + prior + "' WHERE id=" + id)) {
+            return true;
+        }
+        return false;
+
     }
 
     /**
@@ -189,16 +177,13 @@ public class Role implements IRole
      *
      *  добавил Александр 24.05 15:43
      */
-    public boolean setResRole(int resId, int roleId)
-    {
+    public boolean setResRole(int resId, int roleId) {
 
-        if (db.query("insert into res_role values(null,'" + resId + "','" + roleId + "')"))
-        {
+        if (db.query("insert into res_role values(null,'" + resId + "','" + roleId + "')")) {
             return true;
-        } else
-        {
-            return false;
         }
+        return false;
+
     }
 
     /**
@@ -210,14 +195,11 @@ public class Role implements IRole
      *
      *  добавил Александр 24.05 15:31
      */
-    public boolean rmvResRole(int resId, int roleId)
-    {
-        if (db.query("delete from res_role where res_id=" + resId + " and role_id=" + roleId))
-        {
+    public boolean rmvResRole(int resId, int roleId) {
+        if (db.query("delete from res_role where res_id=" + resId + " and role_id=" + roleId)) {
             return true;
-        } else
-        {
-            return false;
         }
+        return false;
+
     }
 }
