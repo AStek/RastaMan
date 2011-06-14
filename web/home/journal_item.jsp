@@ -22,19 +22,36 @@
         <div class="block" id="main">
             <div class="block" id="sidebar">
                 <b>Меню</b><br>
+                <a href="/NetCracker/admin/journal.jsp">Расписание событий</a><br>
+                <a href="/NetCracker/admin/ciclic.jsp">Создание цыклов</a><br>
             </div>
             <div class="block" id="content">
                 <h1>Бронирование</h1>
                 <c:if test="${(param.id ne null)}">
                     <% HashMap info = j.getInfo(request.getParameter("id").toString()); %>
-                    <b>Название ресурса:</b> <%=info.get("TITLE")%><br>
-                    <b>ФИО:</b> <%=info.get("NAME")%><br>
-                    <b>Время резервирования:</b> с <%=info.get("START_TIME")%> по <%=info.get("END_TIME")%><br>
-                    <br>
-                    <a href="/NetCracker/admin/journal.jsp">Вернутса к списку</a>
-                    <% if (session.getAttribute("id").toString().equals(info.get("AC_ID"))){ %>
-                      ::  <a href="http://localhost:8084/NetCracker/admin/journal_item.jsp?del=<%=request.getParameter("id").toString()%>">Снять бронь</a>
-                    <%}%>
+                    <% if(info.get("LOOP")==null){ %>
+                        <b>Название ресурса:</b> <%=info.get("TITLE")%><br>
+                        <b>ФИО:</b> <%=info.get("NAME")%><br>
+                        <b>Время резервирования:</b> с <%=info.get("START_TIME")%> по <%=info.get("END_TIME")%><br>
+                        <br>
+                        <a href="/NetCracker/admin/journal.jsp">Вернутса к списку</a> ::
+                        <a href="http://localhost:8084/NetCracker/admin/journal_item.jsp?del=<%=request.getParameter("id").toString()%>">Снять бронь</a>
+                    <% } else { 
+                        String t1[] = info.get("START_TIME").toString().split(" ");
+                        String t2[] = info.get("END_TIME").toString().split(" ");
+                        %>
+                        <b>Цыклическое событие</b><br>
+                        <b>Название ресурса:</b> <%=info.get("TITLE")%><br>
+                        <b>ФИО:</b> <%=info.get("NAME")%><br>
+                        <b>Период цыкла:</b> с <%=t1[0]%> по <%=t2[0]%><br>
+                        <b>Время резервирования:</b> с <%=t1[1]%> по <%=t2[1]%><br>
+                        <b>Зарезервированные дни:</b><%=info.get("LOOP")%><br>
+                        <br>
+                        <a href="/NetCracker/admin/journal.jsp">Вернутса к списку</a> ::
+                        <a href="http://localhost:8084/NetCracker/admin/journal_item.jsp?del=<%=request.getParameter("id").toString()%>">Снять бронь</a>
+
+
+                    <% } %>
                 </c:if>
 
                 <c:if test="${(param.del ne null)}">

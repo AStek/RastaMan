@@ -99,4 +99,6 @@ public interface IJournal {
      */
     int reserveRes(int accId, int resId, String startTime, String endTime);
 
+    int reserveRes(int accId, int resId, String startTime, String endTime, String loop);
+
 }

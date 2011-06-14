@@ -19,7 +19,7 @@
             session.setAttribute("password", password);
             HashMap inf = new AccountAPI().getInfo(login);
             session.setAttribute("id", inf.get("ID").toString());
-            if (inf.get("ID").toString().equals("1")){
+            if (inf.get("ROLE_ID").toString().equals("1")){
                 session.setAttribute("isAdmin", "1");
             }
             response.sendRedirect("/NetCracker/home/main.jsp");

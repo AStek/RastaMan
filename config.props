@@ -1,0 +1,12 @@
+# this a mailer parameters
+email=greatbobmarley@gmail.com
+mail_password=Uf,hbtkm123
+smtp_server=smtp.gmail.com
+mail_port=465
+
+#this is db parameters
+Host=127.0.0.1
+port=1521
+sid=XE
+login=AStek
+password=221234

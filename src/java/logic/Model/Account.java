@@ -94,7 +94,7 @@ public class Account implements IAccount {
      * Добавлен Андреем 21.05.2011 19:52
      */
     public boolean add(String login, String password, String name, int roleId, String email) {
-        String q = "insert into account values(null,'" + login + "','" + password + "','" + name + "','" + roleId + "','" + email + "')";
+        String q = "insert into account values(null,'" + name + "','" + login + "','" + password + "','" + roleId + "','" + email + "')";
         if (!db.query(q)) {
 //            LogErrorManager.getInstance().addError(2, "Account.add(String " + login + ", String " + password + ", String " + name + ", int " + roleId + ", String " + email + ")",
 //                    "query failed. record did not add (" + q + ")");

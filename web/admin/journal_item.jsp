@@ -36,12 +36,16 @@
                         <br>
                         <a href="/NetCracker/admin/journal.jsp">Вернутса к списку</a> ::
                         <a href="http://localhost:8084/NetCracker/admin/journal_item.jsp?del=<%=request.getParameter("id").toString()%>">Снять бронь</a>
-                    <% } else { %>
+                    <% } else { 
+                        String t1[] = info.get("START_TIME").toString().split(" ");
+                        String t2[] = info.get("END_TIME").toString().split(" ");
+                        %>
                         <b>Цыклическое событие</b><br>
                         <b>Название ресурса:</b> <%=info.get("TITLE")%><br>
                         <b>ФИО:</b> <%=info.get("NAME")%><br>
-                        <b>Период цыкла:</b> с <%=info.get("START_TIME")%> по <%=info.get("END_TIME")%><br>
-                        <b>Время резервирования:</b> с <%=info.get("START_TIME")%> по <%=info.get("END_TIME")%><br>
+                        <b>Период цыкла:</b> с <%=t1[0]%> по <%=t2[0]%><br>
+                        <b>Время резервирования:</b> с <%=t1[1]%> по <%=t2[1]%><br>
+                        <b>Зарезервированные дни:</b><%=info.get("LOOP")%><br>
                         <br>
                         <a href="/NetCracker/admin/journal.jsp">Вернутса к списку</a> ::
                         <a href="http://localhost:8084/NetCracker/admin/journal_item.jsp?del=<%=request.getParameter("id").toString()%>">Снять бронь</a>

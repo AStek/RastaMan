@@ -48,6 +48,8 @@
         <div class="block" id="main">
             <div class="block" id="sidebar">
                 <b>Меню</b><br>
+                <a href="/NetCracker/admin/journal.jsp">Расписание событий</a><br>
+                <a href="/NetCracker/admin/ciclic.jsp">Создание цыклов</a><br>
             </div>
             <div class="block" id="content">
                 <h1>Журнал</h1>
@@ -121,9 +123,8 @@
                 %>
 
                 <%
-                    utilits.getTimelineMenu(out, list, "home/journal_item.jsp?id=");
+                    utilits.getTimelineMenu(out, list, "admin/journal_item.jsp?id=");
                 %>
-
 
 
             </div>

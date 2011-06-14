@@ -59,12 +59,12 @@
 				onDayLinkClick: function(date) {
                                     
                                         //alert(date.data.Date.toString("MM/dd/yyyy"));
-                                        window.location = "/NetCracker/home/journal.jsp?this_date=" + date.data.Date.toString("MM/dd/yyyy");
+                                        window.location = "/NetCracker/admin/journal.jsp?this_date=" + date.data.Date.toString("MM/dd/yyyy");
 					return true;
 				},
 				onDayCellClick: function(date) {
                                         //alert(date.data.Date);
-                                        window.location = "/NetCracker/home/journal.jsp?this_date=" + date.data.Date.toString("MM/dd/yyyy");
+                                        window.location = "/NetCracker/admin/journal.jsp?this_date=" + date.data.Date.toString("MM/dd/yyyy");
 					return true;
 				}
 			};

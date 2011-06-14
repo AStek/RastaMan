@@ -180,4 +180,28 @@ public class JournalAPI {
             return false;
         }
     }
+    
+    /**
+     * Добавление повторяющейся записи в журнал
+     * 
+     * @param accId
+     * @param resId
+     * @param startTime start of the cycle
+     * @param endTime   end of the cycle
+     * @param loop days of the weeks divided by "space" e.g. ("Sun Wed Tue") "Sun Mon Tue Wed Thu Fri Sat";
+     * @return 1 - ok 0 - not enough rights -1 - error
+     */
+    public int reserveRes(String accId, String resId, String startTime, String endTime,String loop)
+    {
+        if (
+            validator.validateInteger(accId) && validator.validateInteger(resId) &&
+            validator.validateDateTime(startTime) && validator.validateDateTime(endTime)
+            && validator.validateString(loop, 28)
+        ){
+            return model.reserveRes(Integer.parseInt(accId), Integer.parseInt(resId),
+                    startTime, endTime,loop);
+        } else {
+            return -1;
+        }
+    }
 }
