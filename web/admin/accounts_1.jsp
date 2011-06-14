@@ -3,6 +3,7 @@
 <%@include file="head.jsp" %>
 <%@page import="logic.API.AccountAPI, logic.API.RoleAPI, java.util.HashMap, java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
         <div class="block" id="main">
             <div class="block" id="sidebar">
                 <b>Меню</b><br>
@@ -41,26 +42,14 @@
                 </c:if>
                 <style>
                     label{width:250px;}
-                    li{padding-left: 0;margin-left: 0}
-                    ul{padding-left: 0}
                 </style>
                 <c:if test="${(param['choosenFIO'] eq null)&&(param['login'] eq null)}">
                     <b>Список пользователей</b><hr>
-                    <script type="text/javascript">
-                        $(document).ready(function(){
-                            $("input#quiksearch").quicksearch('#userList a');
-                        });
-                    </script>
-                    <form action="#">
-                        <input name="quiksearch" id="quiksearch" type="text" name="search" value=""  placeholder="Поиск" autofocus >
-                    </form>
-                    <ul id="userList" style="list-style-type: none">
                     <% for(HashMap a: aAPI.getAll()){ %>
-                        <li><a href="/NetCracker/admin/accounts.jsp?login=<%=a.get("LOGIN").toString()%>">
-                                <%=a.get("NAME").toString()%>
-                            </a></li>
+                        <a href="/NetCracker/admin/accounts.jsp?login=<%=a.get("LOGIN").toString()%>">
+                            <%=a.get("NAME").toString()%>
+                        </a><br>
                     <%}%>
-                    </ul>
                 </c:if>
                 <c:if test="${(param.choosenFIO ne null)||(param.login ne null)}">
                     <%

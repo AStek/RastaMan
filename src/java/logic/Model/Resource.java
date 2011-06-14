@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package logic.Model;
 
 import logic.IModel.IResource;
@@ -9,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import logic.DB;
 import logic.DBcontroll;
+import logic.ErrMgr.LogErrorManager;
 
 /**
  *
@@ -33,7 +31,8 @@ public class Resource implements IResource
     {
         if (db.query("select title from resources where id=" + String.valueOf(id)) == false)
         {
-            // error is here
+            LogErrorManager.getInstance().addError(2, "resource.getById(int "+id+")",
+                    "query failed(select title from resources where id=" + String.valueOf(id)+")");
             return null;
         }
         return db.getResultList().get(0).get("TITLE").toString();
@@ -50,7 +49,8 @@ public class Resource implements IResource
     {
         if (!db.query("delete from resources where id=" + id))
         {
-            //error is here
+            LogErrorManager.getInstance().addError(2, "resource.removeById(int "+id+")",
+                    "query failed(delete from resources where id=" + id+")");
             return false;
         }
         return true;
@@ -66,7 +66,8 @@ public class Resource implements IResource
     {
         if (!db.query("Select * from resources"))
         {
-            //error is here
+            LogErrorManager.getInstance().addError(2, "resource.getAll()",
+                    "query failed (Select * from resources)");
             return null;
         }
         return db.getResultList();
@@ -84,7 +85,8 @@ public class Resource implements IResource
     {
         if (!db.query("insert into resources values(null,'" + title + "')"))
         {
-            //error is here
+            LogErrorManager.getInstance().addError(2, "resource.add(String "+title+")",
+                    "query failed (insert into resources values(null,'" + title + "'))");
             return false;
         }
         return true;
@@ -100,9 +102,11 @@ public class Resource implements IResource
      */
     public ArrayList<HashMap> getRoleOfRes(int id)
     {
-        if (!db.query("select r.ID,r.title from res_role,resources e,role r where e.id=Res_id and r.id=role_id and res_id=" + id))
+        String q="select r.ID,r.title from res_role,resources e,role r where e.id=Res_id and r.id=role_id and res_id=" + id;
+        if (!db.query(q))
         {
-            // error is here
+            LogErrorManager.getInstance().addError(2, "resource.getRoleOfRes(int "+id+")",
+                    "query failed("+q+")");
             return null;
         }
         return db.getResultList();
@@ -121,6 +125,8 @@ public class Resource implements IResource
     {
         if (db.query("UPDATE resources SET title='" + title + "' WHERE id=" + id))
         {
+            LogErrorManager.getInstance().addError(2, "resource.setById(int "+id+", String "+title+")",
+                    "query failed(UPDATE resources SET title='" + title + "' WHERE id=" + id+")");
             return true;
         } else
         {

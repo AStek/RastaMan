@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package logic.Model;
 
 import logic.IModel.IRole;
@@ -9,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import logic.DB;
 import logic.DBcontroll;
+import logic.ErrMgr.LogErrorManager;
 
 /**
  *
@@ -30,15 +27,18 @@ public class Role implements IRole {
      */
     public HashMap getById(int id) {
         if (db.query("select * from role where id=" + String.valueOf(id)) == false) {
-            // error is here
+            LogErrorManager.getInstance().addError(2, "role.getById(int "+id+")",
+                    "query failed(select * from role where id=" + String.valueOf(id)+")");
+
             return null;
         }
         return db.getResultList().get(0);
     }
 
     public boolean add(String title, int prior) {
-        if (!db.query("insert into role values(null,'" + title + "'," + prior + ")")) {
-            //error is here
+        if (!db.query("insert into role values(null,'" + title + "','" + prior + "')")) {
+            LogErrorManager.getInstance().addError(2, "role.add(String "+title+", int "+prior+")",
+                    "query failed(insert into role values(null,'" + title + "," + prior + "')");
             return false;
         }
         return true;
@@ -52,7 +52,8 @@ public class Role implements IRole {
      */
     public boolean add(String title) {
         if (!db.query("insert into role values(null,'" + title + "',0)")) {
-            //error is here
+            LogErrorManager.getInstance().addError(2, "role.add(String "+title+")",
+                    "query failed(insert into role values(null,'" + title + "',0)");
             return false;
         }
         return true;
@@ -79,7 +80,8 @@ public class Role implements IRole {
             f = f && db.query("insert into res_role values(null,'" + resId + "','" + id + "')");
         } catch (Exception e) {
             System.out.println(e.toString());
-            //error is here
+            LogErrorManager.getInstance().addError(2, "role.add(String "+title+", int "+prior+", int "+resId+")",
+                    "query failed ");
             return false;
         }
         return f;
@@ -94,7 +96,8 @@ public class Role implements IRole {
      */
     public boolean removeById(int id) {
         if (!db.query("delete from role where id=" + id)) {
-            // error is here
+            LogErrorManager.getInstance().addError(2, "role.removeById(int "+id+")",
+                    "query failed(delete from role where id=" + id+")");
             return false;
         }
         return true;
@@ -154,7 +157,7 @@ public class Role implements IRole {
      *
      */
     public boolean setById(int id, String title, int prior) {
-        if (db.query("UPDATE role SET title='" + title + "', priority=" + prior + " WHERE id=" + id)) {
+        if (db.query("UPDATE role SET title='" + title + "' priority='" + prior + "' WHERE id=" + id)) {
             return true;
         }
         return false;

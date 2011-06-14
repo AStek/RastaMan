@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package logic.Model;
 
 import logic.IModel.IAccount;
@@ -9,31 +5,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import logic.DB;
 import logic.DBcontroll;
+import logic.ErrMgr.LogErrorManager;
+import logic.SendMail;
 
 /**
  *
  * @author adm
  */
-public class Account implements IAccount
-{
+public class Account implements IAccount {
 
     private DB db = null;
 
-    public Account()
-    {
+    public Account() {
         db = DBcontroll.getInstance();
 
     }
 
-    public String autorize(String login, String paswd)
-    {
+    public String autorize(String login, String paswd) {
 //        db=new DB();
         String q = null;
-        //q = "select a.*,r.priority as r_prior from Account a,role r where a.id=r.id and login='" + login + "' and password='" + paswd + "'";
-        q = "select * from Account where  login='" + login + "' and password='" + paswd + "'";
+        q = "select a.*,r.priority as r_prior from Account a,role r where a.id=r.id and login='" + login + "' and password='" + paswd + "'";
         db.query(q);
-        if (db.getRowcount() == 0)
-        {
+        if (db.getResultList().isEmpty()) {
+            LogErrorManager.getInstance().addError(2, "Account.autorize(String " + login + ", String " + paswd + ")",
+                    "select all from table journal failed");
             return null;//if don't found any then returns null
         }
         return db.getResultList().get(0).get("NAME").toString(); //if all OK returns name of user
@@ -47,14 +42,14 @@ public class Account implements IAccount
      *      в случаее ошибки возвращает -1
      * Добавил Александр 18.05.2011 20:16
      */
-    public int getPriority()
-    {
-        try
-        {
+    public int getPriority() {
+        try {
             return Integer.valueOf(db.getResultList().get(0).get("R_PRIOR").toString());
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
+            LogErrorManager.getInstance().addError(0, "Account.getPriority()",
+                    "WARNING record did not found");
             return -1;
+
         }
     }
 
@@ -65,21 +60,21 @@ public class Account implements IAccount
      *      в случаее ошибки возвращает -1
      * Добавил Александр 18.05.2011 20:16
      */
-    public int getPriority(String login)
-    {
+    public int getPriority(String login) {
         db.query("select r.priority from Account a,role r where a.id=r.id and a.login='" + login + "'");
-        if (db.getRowcount() == 0)
-        {
+        if (db.getRowcount() == 0) {
+            LogErrorManager.getInstance().addError(0, "Account.getPriority(String " + login + ")",
+                    "WARNING record did not found");
             return -1;
         }
         return Integer.valueOf(db.getResultList().get(0).get("PRIORITY").toString());
     }
 
-    public int getPriority(int id)
-    {
+    public int getPriority(int id) {
         db.query("select r.priority from Account a,role r where a.id=r.id and a.id='" + id + "'");
-        if (db.getRowcount() == 0)
-        {
+        if (db.getRowcount() == 0) {
+            LogErrorManager.getInstance().addError(0, "Account.getPriority(int " + id + ")",
+                    "WARNING record did not found");
             return -1;
         }
         return Integer.valueOf(db.getResultList().get(0).get("PRIORITY").toString());
@@ -98,11 +93,13 @@ public class Account implements IAccount
      *
      * Добавлен Андреем 21.05.2011 19:52
      */
-    public boolean add(String login, String password, String name, int roleId,  String email)
-    {
-        db.query("INSERT INTO account"
-                + " VALUES (null,'" + name + "', '" + login + "', '" + password + "', " + Integer.toString(roleId)
-                + ", '" + email + "')");
+    public boolean add(String login, String password, String name, int roleId, String email) {
+        String q = "insert into account values(null,'" + login + "','" + password + "','" + name + "','" + roleId + "','" + email + "')";
+        if (!db.query(q)) {
+//            LogErrorManager.getInstance().addError(2, "Account.add(String " + login + ", String " + password + ", String " + name + ", int " + roleId + ", String " + email + ")",
+//                    "query failed. record did not add (" + q + ")");
+            return false;
+        }
         return true;
 
     }
@@ -120,11 +117,16 @@ public class Account implements IAccount
      *
      *  Добавлен Андреем 21.05.2011 19:52
      */
-    public boolean setById(int id, String login, String password, String name, int roleId,  String email)
-    {
-        return db.query("UPDATE account SET NAME='" + name + "', "
-                + "LOGIN='" + login + "', PASSWORD='" + password + "', ROLE_ID=" + Integer.toString(roleId)+ ","
-                + "EMAIL='" + email + "'  WHERE ID=" + Integer.toString(id));
+    public boolean setById(int id, String login, String password, String name, int roleId, String email) {
+        String q = "UPDATE account SET NAME='" + name + "', "
+                + "LOGIN='" + login + "', PASSWORD='" + password + "', ROLE_ID=" + Integer.toString(roleId) + ","
+                + "EMAIL='" + email + "'  WHERE ID=" + Integer.toString(id);
+        if (!db.query(q)) {
+            LogErrorManager.getInstance().addError(2, "Account.setById(int " + id + ", String " + login + ", String " + password + ", String " + name + ", int " + roleId + ", String " + email + ")",
+                    "query failed. Data did not set (" + q + ")");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -135,8 +137,7 @@ public class Account implements IAccount
      *
      * Добавлен Андреем 21.05.2011 19:52
      */
-    public boolean deleteById(int id)
-    {
+    public boolean deleteById(int id) {
         return db.query("DELETE FROM account WHERE ID=" + Integer.toString(id));
     }
 
@@ -148,11 +149,9 @@ public class Account implements IAccount
      *
      * Добавлен Андреем 22.05.2011 12:05
      */
-    public ArrayList<HashMap> getByNameAndRole(String name, String role)
-    {
+    public ArrayList<HashMap> getByNameAndRole(String name, String role) {
         if (!db.query("SELECT COUNT(a.id) FROM account a, role r WHERE "
-                + "a.name='" + name + "' AND a.role_id=r.id AND r.title='" + role + "';"))
-        {
+                + "a.name='" + name + "' AND a.role_id=r.id AND r.title='" + role + "';")) {
             return null;
         }
         return db.getResultList();
@@ -163,14 +162,11 @@ public class Account implements IAccount
      * @param String login
      * @return boolean
      */
-    public boolean isUnique(String login)
-    {
+    public boolean isUnique(String login) {
         db.query("select * from account where login='" + login + "'");
-        if (db.getResultList().size() == 1)
-        {
+        if (db.getResultList().size() == 1) {
             return true;
-        } else
-        {
+        } else {
             return false;
         }
     }
@@ -179,32 +175,57 @@ public class Account implements IAccount
      *Возвращает существующих пользователей
      * @return ArrayList<HashMap>
      */
-    public ArrayList<HashMap> getAll()
-    {
-        if (!db.query("Select * from account"))
-        {
+    public ArrayList<HashMap> getAll() {
+        if (!db.query("Select * from account")) {
             //error is here
             return null;
         }
         return db.getResultList();
     }
 
-    public HashMap getInfo(String login)
-    {
-        if (!db.query("Select * from account where login='"+login+"'"))
-        {
+    public HashMap getInfo(String login) {
+        if (!db.query("Select * from account where login='" + login + "'")) {
             //error is here
             return null;
         }
-        try
-        {
-        return db.getResultList().get(0);
-        }
-        catch (IndexOutOfBoundsException e)
-        {
+        try {
+            return db.getResultList().get(0);
+        } catch (IndexOutOfBoundsException e) {
+            LogErrorManager.getInstance().addError(0, "Account.getInfo(String " + login + ")",
+                    "WARNING Data did not found (Select * from account where login='" + login + "')");
+
             System.out.println("not found");
             return null;
         }
     }
 
+    public boolean sendMail(String addr,String theme,String name, String res, String from,String to) {
+        try {
+            String messageBody = (""
+                    + "<html>"
+                    + "<head>"
+                    + "<style>"
+                    + "h1{"
+                    + "background-color: #549abf;"
+                    + "}"
+                    + "</style>"
+                    + "</head>"
+                    + "<body>"
+                    + "<div>"
+                    + "<h1>Уважаемый" + name + "</h1><br>"
+                    + "К сожалению время, на которое вы забронировали ресурс <b>" + res + "</b> в связи с непредвиденными обстоятельствами недоступно.<br>"
+                    + "Ресурс будет занят с <b>" + from + "</b> и до <b>" + to + "</b>. Перебронируйте ресурс на другое время.<br>"
+                    + "С уважением, администратор."
+                    + "</div>"
+                    + "</body>"
+                    + "</html>");
+            SendMail sm = new SendMail(addr, theme, messageBody);
+            sm.sendSSLEmail();
+
+        } catch (Exception e) {
+            LogErrorManager.getInstance().addError(3, "SandMail", "FATAL: sending mail is failed");
+            System.out.println("SandMail Error: " + e.toString());
+        }
+        return false;
+    }
 }

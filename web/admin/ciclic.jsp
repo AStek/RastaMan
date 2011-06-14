@@ -17,32 +17,6 @@
 <%@page import="logic.API.AccountAPI"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    JournalAPI j = new JournalAPI();
-
-    String startTime = " 00:00:00";
-    String endTime = " 23:59:59";
-    String thisDate = "";
-    if (request.getParameter("this_date")!=null){
-        String rdate = request.getParameter("this_date").toString();
-        startTime = utilits.convertDataToDBFormat(rdate+" 00:00");
-        endTime   = utilits.convertDataToDBFormat(rdate+" 23:59");
-        thisDate  = rdate;
-        //out.print(rdate);
-    } else {
-        Date nd = new Date();
-        Date nd1 = new Date();
-        nd1.setTime(nd.getTime());
-
-        SimpleDateFormat Format = new SimpleDateFormat("yy/MM/dd");
-        String ds = Format.format(nd);
-        startTime = ds+startTime;
-        nd1.setTime(nd1.getTime()+86400000);
-        ds = Format.format(nd1);
-        endTime   = ds+endTime;
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-        thisDate  = sdf.format(nd);
-    }
-
     ArrayList<HashMap> resList = (ArrayList<HashMap>) new ResourceAPI().getAll().clone();
 %>
         <div class="block" id="main">
@@ -52,16 +26,13 @@
                 <a href="/NetCracker/admin/ciclic.jsp">Создание цыклов</a><br>
             </div>
             <div class="block" id="content">
-                <h1>Журнал</h1>
+                <h1>Создание цыклов</h1>
                 <script type="text/javascript">
                     $(function(){
                         $('#datepicker1').datepicker({
                                 inline: true
                         });
                         $('#datepicker2').datepicker({
-                                inline: true
-                        });
-                        $('#datepicker3').datepicker({
                                 inline: true
                         });
                     });
@@ -73,37 +44,42 @@
 
                 <form method="POST">
                     <fieldset title="Забронировать ресурс">
-                        <legend>Забронировать ресурс</legend>
                         имя ресурса: <select name="res">
                             <% for(HashMap res:resList){ %>
                                 <option value="<%=res.get("ID")%>"><%=res.get("TITLE")%></option>
                             <% } %>
                         </select><br>
-                        дата: <input name="date" id="datepicker1">
-                        c: <input name="time_from" id="timepicker.1">
+                        дата начала цыкла: <input name="from" id="datepicker1">
+                        дата окончания цыкла: <input name="to" id="datepicker2"><br>
+                        время события c: <input name="time_from" id="timepicker.1">
                         по: <input name="time_to" id="timepicker.2"><br>
-                        <input type="submit" value="Внести бронь">
                     </fieldset>
+                        
+                    <fieldset title="Дни недели">
+                        Выберите дни недели для события:<br>
+                        <input type="checkbox" name="Mon" value="Mon" /> Понедельник<br>
+                        <input type="checkbox" name="Tues" value="Tues" /> Вторник<br>
+                        <input type="checkbox" name="Wed" value="Wed" /> Среда<br>
+                        <input type="checkbox" name="Thu" value="Thu" /> Четверг<br>
+                        <input type="checkbox" name="Fri" value="Fri" /> Пятница<br>
+                        <input type="checkbox" name="Sat" value="Sat" /> Субота<br>
+                        <input type="checkbox" name="Sun" value="Sun" /> Воскресенье<br>
+                    </fieldset>
+                        <input type="submit" value="Внести бронь">
                 </form><br>
 
-                <form method="get"><fieldset title="Навигация"><legend>Навигация</legend>
-                    дата:<input name="this_date" id="datepicker3" value="<%=thisDate%>"> <input id="sent_to_date" type="submit" value="Перейти к дате" />
-                </fieldset></form>
 
                 <%
-                    if (request.getParameter("date")!=null){
+                    if (request.getParameter("from")!=null){
                         HashMap info = new AccountAPI().getInfo(session.getAttribute("login").toString());
                         String uId   = info.get("ID").toString();
                         String resId = request.getParameter("res").toString();
                         String sTime = request.getParameter("date").toString() + " " + request.getParameter("time_from").toString();
                         String eTime = request.getParameter("date").toString() + " " + request.getParameter("time_to").toString();
                         int r = -1;
-                        r = j.reserveRes(
-                                uId,
-                                resId,
-                                utilits.convertDataToDBFormat(sTime),
-                                utilits.convertDataToDBFormat(eTime)
-                        );
+
+                        //new JournalAPI().
+
                         if (r>0){%>
                             <div class="attention">Запись успешно добавленна</div>
                         <%} else {
@@ -114,17 +90,8 @@
                             <%}
                         }
                     }
-                    ArrayList<HashMap> list = null;
-                    try{
-                        list = (ArrayList<HashMap>) j.getInfoOfTime(startTime, endTime).clone();
-                    } catch(NullPointerException ex) {
-                        list = new ArrayList<HashMap>();
-                    }
                 %>
 
-                <%
-                    utilits.getTimelineMenu(out, list, "admin/journal_item.jsp?id=");
-                %>
 
 
             </div>

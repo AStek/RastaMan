@@ -21,12 +21,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="../css/style.css" />
+        <link rel="stylesheet" href="../css/core.css" type="text/css" />
         <title>Young team\Главная</title>
         <link type="text/css" href="../css/south-street/jquery-ui-1.8.13.custom.css" rel="stylesheet" />
         <script type="text/javascript" src="../js/jquery-1.5.1.min.js"></script>
         <script type="text/javascript" src="../js/jquery-ui-1.8.13.custom.min.js"></script>
         <script type="text/javascript" src="../js/jquery.ui.core.js"></script>
         <script type="text/javascript" src="../js/jquery.ui.timepicker.js?v=0.2"></script>
+        <script type="text/javascript" src="../js/jMonthCalendar.js"></script>
     </head>
     <body>
         <div class="block" id="header">
@@ -35,6 +37,9 @@
         </div>
         <div class="block" id="menu">
                 <a href="/NetCracker/home/main.jsp">Главная</a> ::
-                <a href="/NetCracker/home/journal.jsp">Бронирование</a> ::
+                <a href="/NetCracker/home/calendar.jsp">Бронирование</a> ::
+                <% if (session.getAttribute("isAdmin")!=null){ %>
+                <a href="/NetCracker/admin/main.jsp">Администрирование</a> ::
+                <% } %>
                 <a href="/NetCracker/out.jsp">Выход</a>
         </div>

@@ -22,10 +22,15 @@
         <link rel="stylesheet" href="../css/style.css" />
         <title>Young team\Админка</title>
         <link type="text/css" href="../css/south-street/jquery-ui-1.8.13.custom.css" rel="stylesheet" />
+        <link rel="stylesheet" href="../css/core.css" type="text/css" />
+	<!--link rel="stylesheet" href="../css/cupertino/jquery-ui.cupertino.css" type="text/css" /-->
+
         <script type="text/javascript" src="../js/jquery-1.5.1.min.js"></script>
         <script type="text/javascript" src="../js/jquery-ui-1.8.13.custom.min.js"></script>
         <script type="text/javascript" src="../js/jquery.ui.core.js"></script>
         <script type="text/javascript" src="../js/jquery.ui.timepicker.js?v=0.2"></script>
+        <script type="text/javascript" src="../js/jMonthCalendar.js"></script>
+        <script type="text/javascript" src="../js/jquery.quicksearch.js"></script>
     </head>
     <body>
         <div class="block" id="header">
@@ -37,6 +42,6 @@
                 <a href="/NetCracker/admin/accounts.jsp">Аккаунты</a> ::
                 <a href="/NetCracker/admin/roles.jsp">Роли</a> ::
                 <a href="/NetCracker/admin/resourses.jsp">Ресурсы</a> ::
-                <a href="/NetCracker/admin/journal.jsp">Бронирование</a> ::
+                <a href="/NetCracker/admin/calendar.jsp">Бронирование</a> ::
                 <a href="/NetCracker/out.jsp">Выход</a>
         </div>

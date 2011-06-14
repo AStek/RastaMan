@@ -55,7 +55,7 @@ public class SendMail {
     prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
     prop.put("mail.smtp.auth", "true");
     prop.put("mail.smtp.port", port);
-    //prop.put("mail.debug", "true");
+    prop.put("mail.debug", "true");
 
     //Создаем новую сессию для текущих параметров
     Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator(){
