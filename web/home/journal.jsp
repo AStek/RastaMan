@@ -48,8 +48,8 @@
         <div class="block" id="main">
             <div class="block" id="sidebar">
                 <b>Меню</b><br>
-                <a href="/NetCracker/admin/journal.jsp">Расписание событий</a><br>
-                <a href="/NetCracker/admin/ciclic.jsp">Создание цыклов</a><br>
+                <a href="/NetCracker/home/journal.jsp">Расписание событий</a><br>
+                <a href="/NetCracker/home/ciclic.jsp">Создание цыклов</a><br>
             </div>
             <div class="block" id="content">
                 <h1>Журнал</h1>

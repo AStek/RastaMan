@@ -22,8 +22,8 @@
         <div class="block" id="main">
             <div class="block" id="sidebar">
                 <b>Меню</b><br>
-                <a href="/NetCracker/admin/journal.jsp">Расписание событий</a><br>
-                <a href="/NetCracker/admin/ciclic.jsp">Создание цыклов</a><br>
+                <a href="/NetCracker/home/journal.jsp">Расписание событий</a><br>
+                <a href="/NetCracker/home/ciclic.jsp">Создание цыклов</a><br>
             </div>
             <div class="block" id="content">
                 <h1>Бронирование</h1>
@@ -34,8 +34,10 @@
                         <b>ФИО:</b> <%=info.get("NAME")%><br>
                         <b>Время резервирования:</b> с <%=info.get("START_TIME")%> по <%=info.get("END_TIME")%><br>
                         <br>
-                        <a href="/NetCracker/admin/journal.jsp">Вернутса к списку</a> ::
-                        <a href="http://localhost:8084/NetCracker/admin/journal_item.jsp?del=<%=request.getParameter("id").toString()%>">Снять бронь</a>
+                        <a href="/NetCracker/home/journal.jsp">Вернутса к списку</a>
+                        <% if (session.getAttribute("id").toString().equals(info.get("AC_ID"))){ %>
+                         ::  <a href="http://localhost:8084/NetCracker/home/journal_item.jsp?del=<%=request.getParameter("id").toString()%>">Снять бронь</a>
+                       <%}%>
                     <% } else { 
                         String t1[] = info.get("START_TIME").toString().split(" ");
                         String t2[] = info.get("END_TIME").toString().split(" ");
@@ -47,9 +49,10 @@
                         <b>Время резервирования:</b> с <%=t1[1]%> по <%=t2[1]%><br>
                         <b>Зарезервированные дни:</b><%=info.get("LOOP")%><br>
                         <br>
-                        <a href="/NetCracker/admin/journal.jsp">Вернутса к списку</a> ::
-                        <a href="http://localhost:8084/NetCracker/admin/journal_item.jsp?del=<%=request.getParameter("id").toString()%>">Снять бронь</a>
-
+                        <a href="/NetCracker/home/journal.jsp">Вернутса к списку</a>
+                        <% if (session.getAttribute("id").toString().equals(info.get("AC_ID"))){ %>
+                         ::  <a href="http://localhost:8084/NetCracker/home/journal_item.jsp?del=<%=request.getParameter("id").toString()%>">Снять бронь</a>
+                       <%}%>
 
                     <% } %>
                 </c:if>
